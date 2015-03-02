@@ -1,6 +1,6 @@
 {
   "name": "download-http",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Download HTTP resources easily.",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/funerr/download-http/issues"
   },
-  "homepage": "https://github.com/funerr/download-http"
+  "homepage": "https://github.com/funerr/download-http",
+  "dependencies": {
+    "mkdirp": "^0.5.0"
+  }
 }
