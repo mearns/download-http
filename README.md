@@ -1,5 +1,7 @@
 # download-http 
 
+[![Build Status](https://travis-ci.org/funerr/download-http.svg)](https://travis-ci.org/funerr/download-http)
+
 Download HTTP(S) resources easily.
 
 ### Example
