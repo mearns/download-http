@@ -4,7 +4,7 @@
   "description": "Download HTTP resources easily.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,16 @@
   "homepage": "https://github.com/funerr/download-http",
   "dependencies": {
     "mkdirp": "^0.5.0"
-  }
+  },
+  "devDependencies": {
+    "chai": "^2.1.0",
+    "mocha": "^2.1.0",
+    "rimraf": "^2.2.8"
+  },
+  "maintainers": [
+    {
+      "name": "funerr",
+      "email": "thefunerr@gmail.com"
+    }
+  ]
 }

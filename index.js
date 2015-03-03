@@ -32,6 +32,7 @@ function download(url, destination, callback) {
 			request.get(redirectURL, responseHandler).on('error', errorHandler);
 		} else {
 			callback(new Error("Status code: " + status));
+			return;
 		}
 
 		response.on("end", function finished(){
@@ -55,7 +56,8 @@ function getSavePath(url, destination) {
 	var pathName = url.pathname;
 	var fileName = path.basename(pathName);
 
-	if(path.basename(destination) === path.basename(path.resolve(destination))) {
+	// Check if we got an absolute path or we need to construct it
+	if (path.extname(destination).length > 0) {
 		return destination;
 	}
 
@@ -64,7 +66,7 @@ function getSavePath(url, destination) {
 
 function writeStream(response, savePath, callback) {
 	var dirPath = path.dirname(savePath);
-	console.log(dirPath, savePath)
+
 	mkdirp(dirPath, function(error) { 
 		if (error) {
 			callback(error);
