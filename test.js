@@ -1,6 +1,11 @@
 var rmdir = require('rimraf');
-var expect = require('chai').expect;
+var chai = require('chai');
+var expect = chai.expect;
+var chaiFs = require('chai-fs');
+var path = require('path');
 var downloadHTTP = require('./index.js');
+
+chai.use(chaiFs);
 
 var normalDownloadURL = 'https://raw.githubusercontent.com/strongloop/express/master/Readme.md';
 var badStatusDownloadURL = 'https://github.com/derpderpdidaderpdep';
@@ -9,8 +14,8 @@ var redirectDownloadURL = 'http://downloads.sourceforge.net/sevenzip/7z920-x64.m
 describe('download-http', function (){
 
 	describe('#downloadHTTP()', function (){
-		this.timeout(5000);
-		
+		this.timeout(10000);
+
 		it('should return an error if no URL is specified', function (){
 			expect(function () {
 				downloadHTTP('', 'i love the internets');
@@ -30,11 +35,11 @@ describe('download-http', function (){
 			});
 		});
 
-		after(function(done){
-			rmdir('storage_test', function (error) { 
-				if (error) { 
-					throw error; 
-				} 
+		afterEach(function(done){
+			rmdir('storage_test', function (error) {
+				if (error) {
+					throw error;
+				}
 				done();
 			});
 		});
@@ -42,6 +47,7 @@ describe('download-http', function (){
 		it('should download a file', function(done){
 			downloadHTTP(normalDownloadURL, 'storage_test/', function (error) {
 				expect(error).to.be.empty;
+				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
 				done();
 			});
 		});
@@ -49,6 +55,7 @@ describe('download-http', function (){
 		it('should comply with redirects', function(done){
 			downloadHTTP(redirectDownloadURL, 'storage_test/wow.msi', function (error) {
 				expect(error).to.be.empty;
+				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
 				done();
 			});
 		});
