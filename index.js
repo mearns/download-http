@@ -4,6 +4,8 @@ var http = require('http');
 var https = require('https');
 var urllib = require('url');
 var mkdirp = require('mkdirp');
+var isString = require('is-string');
+var isObject = require('is-object');
 
 module.exports = download;
 
@@ -54,20 +56,32 @@ function getRequestInstance(url) {
 
 function getSavePath(url, destination) {
 	var pathName = url.pathname;
-	var fileName = path.basename(pathName);
+	var resourceName = path.basename(pathName);
+
+	if (isObject(destination)) {
+		var dir = destination.dir;
+		if (!dir) {
+			throw new Error("Missing require field 'dir' in destination.");
+		}
+		var fileName = destination.fileName || resourceName;
+		return path.resolve(dir, fileName);
+	}
+	else if (!isString(destination)) {
+		throw new Error("Invalid destination; must be a string or object.");
+	}
 
 	// Check if we got an absolute path or we need to construct it
 	if (path.extname(destination).length > 0) {
 		return destination;
 	}
 
-	return path.join(destination, fileName);
+	return path.join(destination, resourceName);
 }
 
 function writeStream(response, savePath, callback) {
 	var dirPath = path.dirname(savePath);
 
-	mkdirp(dirPath, function(error) { 
+	mkdirp(dirPath, function(error) {
 		if (error) {
 			callback(error);
 			return;
@@ -78,8 +92,8 @@ function writeStream(response, savePath, callback) {
 }
 
 function errorHandler(error) {
-	if (callback) { 
-		callback(error); 
+	if (callback) {
+		callback(error);
 	}
 }
 

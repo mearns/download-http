@@ -52,6 +52,28 @@ describe('download-http', function (){
 			});
 		});
 
+		it('should accept an object to specify a destination directory', function(done){
+			downloadHTTP(normalDownloadURL, {dir: 'storage_test'}, function (error) {
+				expect(error).to.be.empty;
+				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
+				done();
+			});
+		});
+
+		it('should accept an object to specify an absolute destination', function(done){
+			downloadHTTP(normalDownloadURL, {dir: 'storage_test', fileName: 'lalala'}, function (error) {
+				expect(error).to.be.empty;
+				expect(path.join('storage_test', 'lalala')).to.be.a.file;
+				done();
+			});
+		});
+
+		it('should throw an error when no "dir" field is specified in the destination object', function(){
+			expect(function () {
+				downloadHTTP(normalDownloadURL, {fileName: 'foobar'});
+			}).to.throw("Missing require field 'dir' in destination.");
+		});
+
 		it('should comply with redirects', function(done){
 			downloadHTTP(redirectDownloadURL, 'storage_test/wow.msi', function (error) {
 				expect(error).to.be.empty;

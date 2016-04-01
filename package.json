@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/funerr/download-http",
   "dependencies": {
+    "is-object": "^1.0.1",
+    "is-string": "^1.0.4",
     "mkdirp": "^0.5.0"
   },
   "devDependencies": {
