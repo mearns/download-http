@@ -14,7 +14,7 @@ var redirectDownloadURL = 'http://downloads.sourceforge.net/sevenzip/7z920-x64.m
 describe('download-http', function (){
 
 	describe('#downloadHTTP()', function (){
-		this.timeout(7500);
+		this.timeout(10000);
 
 		it('should return an error if no URL is specified', function (){
 			expect(function () {
@@ -22,7 +22,7 @@ describe('download-http', function (){
 			}).to.throw('URL must be specified!');
 		});
 
-		it('should return an error if no destenation is specified', function (){
+		it('should return an error if no destination is specified', function (){
 			expect(function () {
 				downloadHTTP(normalDownloadURL, '');
 			}).to.throw('Destination must be specified!');
@@ -46,6 +46,7 @@ describe('download-http', function (){
 
 		it('should download a file', function(done){
 			downloadHTTP(normalDownloadURL, 'storage_test/', function (error, dest) {
+				expect(path.resolve(dest), 'the savePath passed to the callback').to.equal(path.resolve('storage_test', 'Readme.md'));
 				expect(error).to.be.empty;
 				expect(dest).to.be.a.file().and.not.empty;
 				done();
@@ -53,17 +54,19 @@ describe('download-http', function (){
 		});
 
 		it('should accept an object to specify a destination directory', function(done){
-			downloadHTTP(normalDownloadURL, {dir: 'storage_test'}, function (error) {
+			downloadHTTP(normalDownloadURL, {dir: 'storage_test'}, function (error, dest) {
+				expect(path.resolve(dest), 'the savePath passed to the callback').to.equal(path.resolve('storage_test', 'Readme.md'));
 				expect(error).to.be.empty;
-				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
+				expect(dest).to.be.a.file().and.not.empty;
 				done();
 			});
 		});
 
 		it('should accept an object to specify an absolute destination', function(done){
-			downloadHTTP(normalDownloadURL, {dir: 'storage_test', fileName: 'lalala'}, function (error) {
+			downloadHTTP(normalDownloadURL, {dir: 'storage_test', fileName: 'lalala'}, function (error, dest) {
+				expect(path.resolve(dest), 'the savePath passed to the callback').to.equal(path.resolve('storage_test', 'lalala'));
 				expect(error).to.be.empty;
-				expect(path.join('storage_test', 'lalala')).to.be.a.file;
+				expect(dest).to.be.a.file().and.not.empty;
 				done();
 			});
 		});
@@ -75,9 +78,10 @@ describe('download-http', function (){
 		});
 
 		it('should comply with redirects', function(done){
-			downloadHTTP(redirectDownloadURL, 'storage_test/wow.msi', function (error) {
+			downloadHTTP(redirectDownloadURL, 'storage_test/wow.msi', function (error, dest) {
+				expect(path.resolve(dest), 'the savePath passed to the callback').to.equal(path.resolve('storage_test', 'wow.msi'));
 				expect(error).to.be.empty;
-				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
+				expect(dest).to.be.a.file().and.not.empty;
 				done();
 			});
 		});
