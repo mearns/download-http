@@ -45,9 +45,9 @@ describe('download-http', function (){
 		});
 
 		it('should download a file', function(done){
-			downloadHTTP(normalDownloadURL, 'storage_test/', function (error) {
+			downloadHTTP(normalDownloadURL, 'storage_test/', function (error, dest) {
 				expect(error).to.be.empty;
-				expect(path.join('storage_test', 'Readme.md')).to.be.a.file;
+				expect(dest).to.be.a.file().and.not.empty;
 				done();
 			});
 		});
