@@ -14,7 +14,7 @@ var redirectDownloadURL = 'http://downloads.sourceforge.net/sevenzip/7z920-x64.m
 describe('download-http', function (){
 
 	describe('#downloadHTTP()', function (){
-		this.timeout(10000);
+		this.timeout(7500);
 
 		it('should return an error if no URL is specified', function (){
 			expect(function () {
