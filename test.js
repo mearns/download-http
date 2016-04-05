@@ -3,6 +3,7 @@ var chai = require('chai');
 var expect = chai.expect;
 var chaiFs = require('chai-fs');
 var path = require('path');
+
 var downloadHTTP = require('./index.js');
 
 chai.use(chaiFs);
@@ -14,32 +15,33 @@ var redirectDownloadURL = 'http://downloads.sourceforge.net/sevenzip/7z920-x64.m
 describe('download-http', function (){
 
 	describe('#downloadHTTP()', function (){
+
+		afterEach(function(done){
+			rmdir('storage_test', function (error) {
+				if (error) {
+					done(error);
+				}
+				done();
+			});
+		});
+
 		this.timeout(10000);
 
-		it('should return an error if no URL is specified', function (){
+		it('should throw an error if no URL is specified', function (){
 			expect(function () {
 				downloadHTTP('', 'i love the internets');
 			}).to.throw('URL must be specified!');
 		});
 
-		it('should return an error if no destination is specified', function (){
+		it('should throw an error if no destination is specified', function (){
 			expect(function () {
 				downloadHTTP(normalDownloadURL, '');
 			}).to.throw('Destination must be specified!');
 		});
 
-		it('should throw an error when a URL returns a bad status code', function (done){
-			downloadHTTP(badStatusDownloadURL, 'storage_test/', function (error) {
+		it('should produce an error when a URL returns a bad status code', function (done){
+			downloadHTTP(badStatusDownloadURL, 'storage_test/', function (error){
 				expect(error.message).to.equal('Status code: 404');
-				done();
-			});
-		});
-
-		afterEach(function(done){
-			rmdir('storage_test', function (error) {
-				if (error) {
-					throw error;
-				}
 				done();
 			});
 		});

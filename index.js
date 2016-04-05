@@ -36,7 +36,9 @@ function download(url, destination, callback) {
 		}
 	}
 	else {
-		errorHandler = function (error) {};
+		errorHandler = function (error) {
+			throw error;
+		};
 		successHandler = function () {};
 	}
 
