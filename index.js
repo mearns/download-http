@@ -44,7 +44,6 @@ function download(url, destination, callback) {
 
 	request.get(url, function responseHandler(response) {
 		var status = response.statusCode;
-
 		if (status === 200) {
 			var writerPromise = writeStream(response, savePath, callback);
 			response.on("end", function finished(){
@@ -59,7 +58,7 @@ function download(url, destination, callback) {
 			var redirectURL = response.headers.location;
 			request.get(redirectURL, responseHandler).on('error', errorHandler);
 		} else {
-			callback(new Error("Status code: " + status));
+			errorHandler(new Error("Status code: " + status));
 		}
 	}).on('error', errorHandler);
 }
